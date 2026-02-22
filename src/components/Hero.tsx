@@ -481,9 +481,7 @@ const Hero = () => {
             padding: '14px 24px',
           }}
         >
-          Deploy your own Aevora agent that writes content, does research, clears
-          your inbox, and sends you a morning briefing. Pick a model, connect a
-          channel, go live.
+          Deploy your own Aevora engine that turns product images into high-converting video ads in minutes. Pick a template, generate creatives, and launch everywhere instantly.
         </p>
 
         {/* Email + CTA */}
