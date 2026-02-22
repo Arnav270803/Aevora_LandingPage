@@ -22,13 +22,12 @@
 //     <section
 //       style={{
 //         position: 'relative',
-//         flex: 1,
 //         display: 'flex',
 //         flexDirection: 'column',
 //         alignItems: 'center',
 //         justifyContent: 'center',
 //         textAlign: 'center',
-//         padding: '0 24px 80px',
+//         padding: '0 24px 0',
 //         minHeight: 'calc(100vh - 88px)',
 //         overflow: 'hidden',
 //       }}
@@ -69,7 +68,7 @@
 //                 whiteSpace: 'nowrap',
 //               }}
 //             >
-//               Launching soon — deploy your Aevora bot
+//               Launching soon — deploy your Aevora agent
 //             </span>
 //           </span>
 //         </div>
@@ -80,11 +79,11 @@
 //             ...fade(0.12),
 //             fontFamily: 'monospace',
 //             fontWeight: 800,
-//             fontSize: 'clamp(48px, 8vw, 100px)',
+//             fontSize: 'clamp(34px, 5.5vw, 72px)',
 //             lineHeight: 1.02,
 //             letterSpacing: '-0.02em',
 //             color: '#111111',
-//             margin: '0 0 28px',
+//             margin: '0 0 4px',
 //             textShadow: `
 //               0 -1px 0 rgba(255,255,255,0.95),
 //               0 1px 2px rgba(0,0,0,0.18),
@@ -130,7 +129,7 @@
 //               />
 //             </svg>
 //           </span>
-//           {' '}bot,
+//           {' '}agent,
 //           <br />
 //           live in{' '}
 //           <span
@@ -158,7 +157,7 @@
 //               `,
 //             }}
 //           >
-//             minutes
+//             minutes.
 //           </span>
 //         </h1>
 
@@ -173,14 +172,14 @@
 //             color: '#374151',
 //             maxWidth: 480,
 //             margin: '0 auto 44px',
-//             background: 'rgba(255,255,255,0.30)',
+//             background: 'rgba(255,255,255,0.70)',
 //             backdropFilter: 'blur(8px)',
 //             WebkitBackdropFilter: 'blur(8px)',
 //             borderRadius: 10,
 //             padding: '14px 24px',
 //           }}
 //         >
-//           Deploy your own Aevora bot that writes content, does research, clears
+//           Deploy your own Aevora agent that writes content, does research, clears
 //           your inbox, and sends you a morning briefing. Pick a model, connect a
 //           channel, go live.
 //         </p>
@@ -268,7 +267,7 @@
 //             color: '#4b5563',
 //             letterSpacing: '0.06em',
 //             display: 'inline-block',
-//             background: 'rgba(255,255,255,0.30)',
+//             background: 'rgba(255,255,255,0.70)',
 //             backdropFilter: 'blur(8px)',
 //             WebkitBackdropFilter: 'blur(8px)',
 //             borderRadius: 8,
@@ -284,6 +283,7 @@
 // };
 
 // export default Hero;
+
 
 
 
@@ -331,21 +331,19 @@ const Hero = () => {
     <section
       style={{
         position: 'relative',
-        flex: 1,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: '0 24px 80px',
-        minHeight: 'calc(100vh - 88px)',
+        padding: '40px 24px 60px',
         overflow: 'hidden',
       }}
     >
       <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: 780 }}>
 
         {/* Badge */}
-        <div style={{ ...fade(0), marginBottom: 32 }}>
+        <div style={{ ...fade(0), marginBottom: 16 }}>
           <span
             style={{
               display: 'inline-flex',
@@ -393,7 +391,7 @@ const Hero = () => {
             lineHeight: 1.02,
             letterSpacing: '-0.02em',
             color: '#111111',
-            margin: '0 0 28px',
+            margin: '0 0 4px',
             textShadow: `
               0 -1px 0 rgba(255,255,255,0.95),
               0 1px 2px rgba(0,0,0,0.18),
@@ -502,7 +500,7 @@ const Hero = () => {
             alignItems: 'stretch',
             justifyContent: 'center',
             gap: 10,
-            marginBottom: 16,
+            marginBottom: 8,
             flexWrap: 'wrap',
           }}
         >
