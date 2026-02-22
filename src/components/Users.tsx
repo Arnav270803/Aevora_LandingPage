@@ -337,7 +337,7 @@ const Users = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: '40px 24px 80px',
+        padding: '20px 24px 80px',
         overflow: 'hidden',
       }}
     >

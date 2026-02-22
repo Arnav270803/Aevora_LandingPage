@@ -1,4 +1,3 @@
-
 // import { useEffect, useState } from 'react';
 
 // const Hero = () => {
@@ -27,15 +26,14 @@
 //         alignItems: 'center',
 //         justifyContent: 'center',
 //         textAlign: 'center',
-//         padding: '0 24px 0',
-//         minHeight: 'calc(100vh - 88px)',
+//         padding: '40px 24px 60px',
 //         overflow: 'hidden',
 //       }}
 //     >
 //       <div style={{ position: 'relative', zIndex: 10, width: '100%', maxWidth: 780 }}>
 
 //         {/* Badge */}
-//         <div style={{ ...fade(0), marginBottom: 32 }}>
+//         <div style={{ ...fade(0), marginBottom: 16 }}>
 //           <span
 //             style={{
 //               display: 'inline-flex',
@@ -192,7 +190,7 @@
 //             alignItems: 'stretch',
 //             justifyContent: 'center',
 //             gap: 10,
-//             marginBottom: 16,
+//             marginBottom: 8,
 //             flexWrap: 'wrap',
 //           }}
 //         >
@@ -292,33 +290,27 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState } from 'react';
 
 const Hero = () => {
   const [visible, setVisible] = useState(false);
   const [signed, setSigned] = useState(false);
   const [email, setEmail] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
     const s = setTimeout(() => setSigned(true), 900);
-    return () => { clearTimeout(t); clearTimeout(s); };
+
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      clearTimeout(t);
+      clearTimeout(s);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const fade = (delay: number): React.CSSProperties => ({
@@ -336,7 +328,7 @@ const Hero = () => {
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: '40px 24px 60px',
+        padding: '40px 24px 20px',
         overflow: 'hidden',
       }}
     >
@@ -388,7 +380,7 @@ const Hero = () => {
             fontFamily: 'monospace',
             fontWeight: 800,
             fontSize: 'clamp(34px, 5.5vw, 72px)',
-            lineHeight: 1.02,
+            lineHeight: isMobile ? 1.12 : 1.02,
             letterSpacing: '-0.02em',
             color: '#111111',
             margin: '0 0 4px',
@@ -411,7 +403,9 @@ const Hero = () => {
                 position: 'absolute',
                 left: '50%',
                 transform: 'translateX(-50%)',
-                bottom: '-10px',
+                // On mobile, pull the underline closer to the word so it
+                // doesn't bleed into the "i" dot on the next line.
+                bottom: isMobile ? '-5px' : '-10px',
                 width: '106%',
                 height: 'auto',
                 overflow: 'visible',
@@ -422,7 +416,7 @@ const Hero = () => {
                 d="M4,11 C40,4 80,16 130,9 C180,2 220,14 256,7"
                 fill="none"
                 stroke="#e8622a"
-                strokeWidth="2.4"
+                strokeWidth={isMobile ? '1.8' : '2.4'}
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 style={{
