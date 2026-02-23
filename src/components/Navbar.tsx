@@ -140,6 +140,9 @@ const Navbar = () => {
 
           {/* CTA button — always visible */}
           <button
+            onClick={() => {
+              document.getElementById('waitlist')?.scrollIntoView({ behavior: 'smooth' });
+            }}
             style={{
               background: 'linear-gradient(135deg, #f07040 0%, #e8622a 60%, #d4521e 100%)',
               color: '#ffffff',

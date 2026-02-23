@@ -6,6 +6,7 @@ import Comparison from '../components/Comparison'
 import SlidingWindow from '../components/SlidingWindow'
 import Footer from '../components/Footer'
 import FAQ from '../components/FAQ'
+import Wishlist from '../components/Wishlist'
 
 const Landing = () => {
   const isDark = false; // You can make this dynamic later with a theme context
@@ -26,6 +27,7 @@ const Landing = () => {
       <Comparison />
       <SlidingWindow />
       <FAQ />
+      <Wishlist />
       <Footer />
     </div>
   )
