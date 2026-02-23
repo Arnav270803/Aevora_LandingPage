@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import Users from '../components/Users'
+import ExplainationComponent from '../components/ExplainationComponent'
 
 const Landing = () => {
   const isDark = false; // You can make this dynamic later with a theme context
@@ -17,6 +18,7 @@ const Landing = () => {
       <Navbar />
       <Hero />
       <Users />
+      <ExplainationComponent />
     </div>
   )
 }
