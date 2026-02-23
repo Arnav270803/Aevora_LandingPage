@@ -92,7 +92,24 @@ const Navbar = () => {
             {['How it works', 'Compare', 'FAQ'].map((link) => (
               <a
                 key={link}
-                href="#"
+                href={
+                  link === 'Compare' ? '#comparison' 
+                  : link === 'How it works' ? '#how-it-works' 
+                  : link === 'FAQ' ? '#faq'
+                  : '#'
+                }
+                onClick={(e) => {
+                  if (link === 'Compare') {
+                    e.preventDefault();
+                    document.getElementById('comparison')?.scrollIntoView({ behavior: 'smooth' });
+                  } else if (link === 'How it works') {
+                    e.preventDefault();
+                    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  } else if (link === 'FAQ') {
+                    e.preventDefault();
+                    document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 style={{
                   color: '#5a5a5a',
                   fontSize: '13.5px',
@@ -223,8 +240,25 @@ const Navbar = () => {
                 {['How it works', 'Compare', 'FAQ'].map((link, i) => (
                   <a
                     key={link}
-                    href="#"
-                    onClick={() => setMenuOpen(false)}
+                    href={
+                      link === 'Compare' ? '#comparison' 
+                      : link === 'How it works' ? '#how-it-works' 
+                      : link === 'FAQ' ? '#faq'
+                      : '#'
+                    }
+                    onClick={(e) => {
+                      if (link === 'Compare') {
+                        e.preventDefault();
+                        document.getElementById('comparison')?.scrollIntoView({ behavior: 'smooth' });
+                      } else if (link === 'How it works') {
+                        e.preventDefault();
+                        document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                      } else if (link === 'FAQ') {
+                        e.preventDefault();
+                        document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+                      }
+                      setMenuOpen(false);
+                    }}
                     style={{
                       display: 'block',
                       padding: '13px 18px',

@@ -18,6 +18,7 @@ const rightRows = [
 const Comparison = () => {
   return (
     <section
+      id="comparison"
       style={{
         padding: '60px 24px 80px',
         display: 'flex',

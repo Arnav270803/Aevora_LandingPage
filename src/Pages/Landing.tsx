@@ -3,7 +3,9 @@ import Hero from '../components/Hero'
 import Users from '../components/Users'
 import ExplainationComponent from '../components/ExplainationComponent'
 import Comparison from '../components/Comparison'
+import SlidingWindow from '../components/SlidingWindow'
 import Footer from '../components/Footer'
+import FAQ from '../components/FAQ'
 
 const Landing = () => {
   const isDark = false; // You can make this dynamic later with a theme context
@@ -22,6 +24,8 @@ const Landing = () => {
       <Users />
       <ExplainationComponent />
       <Comparison />
+      <SlidingWindow />
+      <FAQ />
       <Footer />
     </div>
   )

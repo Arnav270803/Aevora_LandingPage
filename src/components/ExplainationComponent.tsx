@@ -86,6 +86,7 @@ const DeployTerminal = () => {
 
   return (
     <section
+      id="how-it-works"
       style={{
         display: 'flex',
         alignItems: 'center',
