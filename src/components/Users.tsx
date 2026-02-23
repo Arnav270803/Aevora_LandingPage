@@ -1,44 +1,30 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { useEffect, useState, useRef } from 'react';
 
-const TOTAL_SIGNED = 10;
+const APPS_SCRIPT_URL = import.meta.env.VITE_APPS_SCRIPT_URL as string;
 const MAX_CAPACITY = 50;
-const SPOTS_LEFT = 40;
-
-const BATCHES = [
-  { label: 'Batch 1', limit: 50, pct: 100, done: false },
-];
-
-const fillPct = (TOTAL_SIGNED / MAX_CAPACITY) * 100;
 
 const Users = () => {
   const [visible, setVisible] = useState(false);
+  const [signupCount, setSignupCount] = useState(0);
   const [counted, setCounted] = useState(0);
   const [barFilled, setBarFilled] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  // Fetch live count from Apps Script on mount
+  useEffect(() => {
+    fetch(APPS_SCRIPT_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        if (typeof data.count === 'number') {
+          setSignupCount(data.count);
+        }
+      })
+      .catch(() => {
+        // Silently keep 0 on error
+      });
+  }, []);
+
+  // Intersection observer — trigger animation when scrolled into view
   useEffect(() => {
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
@@ -48,20 +34,24 @@ const Users = () => {
     return () => obs.disconnect();
   }, []);
 
+  // Animated count-up — runs once visible AND we have the real count
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || signupCount === 0) return;
     let current = 0;
     const duration = 1400;
     const interval = 16;
-    const increment = TOTAL_SIGNED / (duration / interval);
+    const increment = signupCount / (duration / interval);
     const timer = setInterval(() => {
       current += increment;
-      if (current >= TOTAL_SIGNED) { setCounted(TOTAL_SIGNED); clearInterval(timer); }
+      if (current >= signupCount) { setCounted(signupCount); clearInterval(timer); }
       else setCounted(Math.floor(current));
     }, interval);
     setTimeout(() => setBarFilled(true), 150);
     return () => clearInterval(timer);
-  }, [visible]);
+  }, [visible, signupCount]);
+
+  const spotsLeft = Math.max(0, MAX_CAPACITY - signupCount);
+  const fillPct = Math.min(100, (signupCount / MAX_CAPACITY) * 100);
 
   const fadeStyle = (delay: number): React.CSSProperties => ({
     opacity: visible ? 1 : 0,
@@ -93,7 +83,7 @@ const Users = () => {
         }}
       >
 
-        {/* Big count */}
+        {/* Big animated count */}
         <div style={fadeStyle(0)}>
           <span
             style={{
@@ -133,7 +123,6 @@ const Users = () => {
 
         {/* Progress bar */}
         <div style={{ ...fadeStyle(0.2), width: '100%' }}>
-          {/* Track */}
           <div
             style={{
               position: 'relative',
@@ -157,48 +146,26 @@ const Users = () => {
                 transition: 'width 1.3s cubic-bezier(0.4,0,0.2,1)',
               }}
             />
-            {/* Batch tick lines */}
-            {BATCHES.slice(0, 2).map((b) => (
-              <div
-                key={b.label}
-                style={{
-                  position: 'absolute',
-                  top: 0, bottom: 0,
-                  left: `${b.pct}%`,
-                  width: 1.5,
-                  background: 'rgba(255,255,255,0.6)',
-                  zIndex: 2,
-                }}
-              />
-            ))}
+            {/* End tick at 50 */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0, bottom: 0,
+                left: '100%',
+                width: 1.5,
+                background: 'rgba(255,255,255,0.6)',
+                zIndex: 2,
+              }}
+            />
           </div>
 
           {/* Tick labels */}
           <div style={{ position: 'relative', width: '100%', marginTop: 12, height: 20 }}>
-            {BATCHES.map((b, i) => (
-              <div
-                key={b.label}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: i === 2 ? 'auto' : `${b.pct}%`,
-                  right: i === 2 ? 0 : 'auto',
-                  transform: i === 1 ? 'translateX(-50%)' : 'none',
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'monospace',
-                    fontSize: 11,
-                    fontWeight: 700,
-                    whiteSpace: 'nowrap',
-                    color: !b.done ? '#e8622a' : '#9ca3af',
-                  }}
-                >
-                  {b.label} ({b.limit.toLocaleString()})
-                </span>
-              </div>
-            ))}
+            <div style={{ position: 'absolute', top: 0, right: 0 }}>
+              <span style={{ fontFamily: 'monospace', fontSize: 11, fontWeight: 700, whiteSpace: 'nowrap', color: '#e8622a' }}>
+                Batch 1 ({MAX_CAPACITY})
+              </span>
+            </div>
           </div>
         </div>
 
@@ -210,7 +177,7 @@ const Users = () => {
               fontFamily: 'monospace',
               fontWeight: 700,
               fontSize: 'clamp(13px, 1.5vw, 15px)',
-              color: '#e8622a',
+              color: spotsLeft > 0 ? '#e8622a' : '#dc2626',
               background: 'rgba(255,255,255,0.75)',
               backdropFilter: 'blur(8px)',
               WebkitBackdropFilter: 'blur(8px)',
@@ -219,55 +186,42 @@ const Users = () => {
               textShadow: '0 1px 3px rgba(255,255,255,0.6)',
             }}
           >
-            Batch 1 filling up — {SPOTS_LEFT} spots left
+            {spotsLeft > 0
+              ? `Batch 1 filling up — ${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left`
+              : 'Batch 1 — Fully booked'}
           </span>
         </div>
 
-        {/* Batch pills */}
-        <div
-          style={{
-            ...fadeStyle(0.45),
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            gap: 10,
-          }}
-        >
-          {[
-            { label: `Batch 1 — ${SPOTS_LEFT} spots left`, done: false },
-          ].map((b) => (
-            <div
-              key={b.label}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                fontFamily: 'monospace',
-                fontWeight: 600,
-                fontSize: 12.5,
-                padding: '8px 16px',
-                borderRadius: 10,
-                background: 'rgba(255,255,255,0.75)',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)',
-                border: b.done
-                  ? '1px solid rgba(0,0,0,0.08)'
-                  : '1px solid rgba(232,98,42,0.35)',
-                color: b.done ? '#9ca3af' : '#e8622a',
-                boxShadow: b.done
-                  ? '0 1px 4px rgba(0,0,0,0.06)'
-                  : '0 2px 12px rgba(232,98,42,0.15)',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {b.done && (
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6l3 3 5-5" stroke="#9ca3af" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              )}
-              {b.label}
-            </div>
-          ))}
+        {/* Batch pill */}
+        <div style={{ ...fadeStyle(0.45), display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10 }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              fontFamily: 'monospace',
+              fontWeight: 600,
+              fontSize: 12.5,
+              padding: '8px 16px',
+              borderRadius: 10,
+              background: 'rgba(255,255,255,0.75)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              border: spotsLeft > 0 ? '1px solid rgba(232,98,42,0.35)' : '1px solid rgba(0,0,0,0.08)',
+              color: spotsLeft > 0 ? '#e8622a' : '#9ca3af',
+              boxShadow: spotsLeft > 0 ? '0 2px 12px rgba(232,98,42,0.15)' : '0 1px 4px rgba(0,0,0,0.06)',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {spotsLeft === 0 && (
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 6l3 3 5-5" stroke="#9ca3af" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
+            {spotsLeft > 0
+              ? `Batch 1 — ${spotsLeft} spot${spotsLeft === 1 ? '' : 's'} left`
+              : 'Batch 1 — Full'}
+          </div>
         </div>
 
       </div>
